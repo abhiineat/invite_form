@@ -36,12 +36,13 @@ export default function InviteForm() {
       description,
       capacity: capacity === '' ? 'Unlimited' : capacity,
       requireApproval,
-      themeFileBase64,
-      themeFileType,
+      themeFileBase64: imageUrl, // 👈 Use imageUrl as theme
+      themeFileType: 'image/png', // 👈 Or use `imageUrl?.match(/data:(.*?);/)` to extract mime
     };
-
+  
     localStorage.setItem('invite-data', JSON.stringify(data));
   };
+  
 
   const handleSave = () => {
     saveToLocalStorage();
@@ -68,36 +69,80 @@ export default function InviteForm() {
   return (
     <div className="w-full max-w-6xl mx-auto py-10 px-6 grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Left - Visual Placeholder */}
-      <div className="relative w-full h-[25rem] bg-gray-200 rounded-lg overflow-hidden">
-  {imageUrl ? (
-    <img
-      src={imageUrl}
-      alt="Custom"
-      className="absolute inset-0 w-full h-full object-cover"
-    />
-  ) : (
-    <img
-    src="/def.png"
-    alt="Location Icon"
-    className="absolute inset-0 w-full h-full object-cover"
-  />
-  )}
+<div className="flex flex-col gap-4">
+  <div className="relative w-full h-[25rem] bg-gray-200 rounded-lg overflow-hidden">
+    {imageUrl ? (
+      <img
+        src={imageUrl}
+        alt="Custom"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+    ) : (
+      <img
+        src="/def.png"
+        alt="Location Icon"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+    )}
 
-<label className="absolute bottom-4 right-4 z-20 bg-white text-white p-3 rounded-full hover:bg-white transition cursor-pointer flex items-center justify-center w-12 h-12">
-  <img
-    src="/image.svg"
-    alt="Upload"
-    className="inline-block"
-  />
-  <input
-    type="file"
-    accept="image/*"
-    onChange={handleImageChange}
-    className="hidden"
-  />
-</label>
+    <label className="absolute bottom-4 right-4 z-20 bg-white text-white p-3 rounded-full hover:bg-white transition cursor-pointer flex items-center justify-center w-12 h-12">
+      <img
+        src="/image.svg"
+        alt="Upload"
+        className="inline-block"
+      />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+        className="hidden"
+      />
+    </label>
+  </div>
+
+  {/* Theme Upload placed below the image */}
+  <div className="text-white/80 text-sm">
+  <label className="block mb-1">Theme</label>
+  <div className="flex items-center gap-3 bg-[#502d50] p-3 rounded-lg">
+    <div className="bg-white/20 p-2 rounded-md">
+      {/* Placeholder for icon or preview */}
+      <svg
+        className="w-6 h-6 text-white/60"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        viewBox="0 0 24 24"
+      >
+        <path d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </div>
+    <div>
+      <div className="text-xs text-white/60">Theme</div>
+      <div className="text-white font-semibold">Minimal</div>
+    </div>
+    <div className="ml-auto">
+      <svg
+        className="w-4 h-4 text-white/60"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        viewBox="0 0 24 24"
+      >
+        <path d="M6 9l6 6 6-6" />
+      </svg>
+    </div>
+    {/* <input
+      type="file"
+      accept="image/*,video/mp4"
+      onChange={handleThemeFileChange}
+      className="absolute opacity-0 w-[32rem] h-[3rem] cursor-pointer"
+    /> */}
+  </div>
+</div>
 
 </div>
+
+
 
 
       {/* Right - Form */}
@@ -133,7 +178,7 @@ export default function InviteForm() {
 
 
 
-<div className="flex items-start gap-4 p-4 bg-[#3a1d3a] rounded-xl">
+<div className="flex items-start gap-4 p-4 bg-[#502d50] rounded-xl">
   {/* Start & End Labels with Dotted Line */}
   <div className="flex flex-col items-center gap-2 pt-2 relative">
     {/* Start Circle */}
@@ -214,25 +259,35 @@ export default function InviteForm() {
           onChange={(e) => setDescription(e.target.value)}
         />
 
-<div className="bg-[#3a1d3a] p-4 rounded-xl space-y-4">
-  <h3 className="text-white font-semibold text-sm">Event Options</h3>
+        {/* Title outside */}
+<h3 className="text-white font-semibold text-sm mb-2">Event Options</h3>
 
+{/* Box containing options */}
+<div className="bg-[#502d50] p-4 rounded-xl space-y-4">
   {/* Tickets Row */}
-  <div className="flex items-center justify-between text-white/80 text-sm">
+  <div className="flex items-center justify-between font-medium text-white/80 text-sm">
     <div className="flex items-center gap-2">
-      <img src="/ticket-icon.svg" alt="Tickets" className="w-4 h-4 opacity-70" />
+      {/* <img src="/ticket-icon.svg" alt="Tickets" className="w-4 h-4 opacity-70" /> */}
       <span>Tickets</span>
     </div>
     <div className="flex items-center gap-1">
-      <span className="opacity-60">Free</span>
-      <img src="/edit-icon.svg" alt="Edit" className="w-3 h-3 opacity-50" />
+    <select
+  
+  className="opacity-60 bg-transparent border-b border-white/30 focus:outline-none focus:border-white px-1 text-white"
+>
+  <option value="Free">Free</option>
+  <option value="Paid">Paid</option>
+  <option value="Donation">Donation</option>
+</select>
+
+      {/* <img src="/edit-icon.svg" alt="Edit" className="w-3 h-3 opacity-50" /> */}
     </div>
   </div>
 
   {/* Require Approval Row */}
-  <div className="flex items-center justify-between text-white/80 text-sm">
+  <div className="flex items-center justify-between font-medium text-white/80 text-sm">
     <div className="flex items-center gap-2">
-      <img src="/user-check-icon.svg" alt="Approval" className="w-4 h-4 opacity-70" />
+      {/* <img src="/user-check-icon.svg" alt="Approval" className="w-4 h-4 opacity-70" /> */}
       <span>Require Approval</span>
     </div>
     <label className="inline-flex items-center cursor-pointer">
@@ -251,42 +306,41 @@ export default function InviteForm() {
   {/* Capacity Row */}
   <div className="flex items-center justify-between text-white/80 text-sm">
     <div className="flex items-center gap-2">
-      <img src="/capacity-icon.svg" alt="Capacity" className="w-4 h-4 opacity-70" />
+      {/* <img src="/capacity-icon.svg" alt="Capacity" className="w-4 h-4 opacity-70" /> */}
       <span>Capacity</span>
     </div>
     <div className="flex items-center gap-1">
-      <span className="opacity-60">{capacity || 'Unlimited'}</span>
-      <img src="/edit-icon.svg" alt="Edit" className="w-3 h-3 opacity-50" />
+    <input
+  type="text"
+  value={capacity}
+  onChange={(e) => setCapacity(e.target.value)}
+  placeholder=""
+  className="opacity-80 bg-transparent border-b border-white/30 focus:outline-none focus:border-white px-1"
+/>
+
+      {/* <img src="/edit-icon.svg" alt="Edit" className="w-3 h-3 opacity-50" /> */}
     </div>
   </div>
 
-  {/* Theme Upload */}
-  <div className="text-white/80 text-sm">
-    <label className="block mb-1">Theme (Image or MP4)</label>
-    <input
-      type="file"
-      accept="image/*,video/mp4"
-      onChange={handleThemeFileChange}
-      className="text-xs file:bg-purple-600 file:text-white file:px-3 file:py-1 file:rounded file:border-0"
-    />
-  </div>
+  
 </div>
 
 
-        <div className="flex gap-4">
-          <button
-            className="px-6 py-2 bg-white text-black rounded-md"
-            onClick={handleSave}
-          >
-            Save Invite
-          </button>
-          <button
-            className="px-6 py-2 bg-gray-300 text-black rounded-md"
-            onClick={handlePreview}
-          >
-            Preview
-          </button>
-        </div>
+<div className="flex flex-col gap-3">
+  <button
+    className="w-full px-6 py-3 bg-white text-black rounded-md font-medium"
+    onClick={handleSave}
+  >
+    Save Invite
+  </button>
+  <button
+    className="w-full px-6 py-3 bg-gray-300 text-black rounded-md font-medium"
+    onClick={handlePreview}
+  >
+    Preview
+  </button>
+</div>
+
       </div>
     </div>
   );
