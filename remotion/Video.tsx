@@ -1,38 +1,25 @@
 import { Composition } from 'remotion';
-import { registerRoot } from 'remotion';
-import React from 'react';
+import { MyVideo } from './MyVideo';
 
-const MyVideo: React.FC = () => {
+export const RemotionVideo = () => {
   return (
-    <div
-      style={{
-        flex: 1,
-        backgroundColor: 'white',
-        fontSize: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-        display: 'flex',
+    <Composition
+      id="my-comp"
+      component={MyVideo}
+      durationInFrames={150}
+      fps={30}
+      width={1080}
+      height={1920}
+      defaultProps={{
+        imageUrl: '',
+        theme: 'light',
+        title: 'Your Event Title',
+        startTime: '2025-06-10T18:00',
+        endTime: '2025-06-10T21:00',
+        location: 'Venue Name',
+        description: 'Event description goes here.',
+        capacity: 'Unlimited',
       }}
-    >
-      Hello from Remotion!
-    </div>
+    />
   );
 };
-
-const RemotionRoot: React.FC = () => {
-  return (
-    <>
-      <Composition
-        id="MyVideo"
-        component={MyVideo}
-        durationInFrames={150}
-        fps={30}
-        width={1280}
-        height={720}
-      />
-    </>
-  );
-};
-
-// ✅ This is required
-registerRoot(RemotionRoot);
