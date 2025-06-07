@@ -286,22 +286,35 @@ export default function InviteForm() {
 
   {/* Require Approval Row */}
   <div className="flex items-center justify-between font-medium text-white/80 text-sm">
-    <div className="flex items-center gap-2">
-      {/* <img src="/user-check-icon.svg" alt="Approval" className="w-4 h-4 opacity-70" /> */}
-      <span>Require Approval</span>
-    </div>
-    <label className="inline-flex items-center cursor-pointer">
-      <input
-        type="checkbox"
-        className="sr-only peer"
-        checked={requireApproval}
-        onChange={() => setRequireApproval(!requireApproval)}
-      />
-      <div className="w-9 h-5 bg-gray-600 peer-checked:bg-purple-500 rounded-full peer peer-focus:ring-2 peer-focus:ring-purple-300 transition-all relative">
-        <div className="w-4 h-4 bg-white rounded-full absolute left-0.5 top-0.5 peer-checked:translate-x-4 transition-transform"></div>
-      </div>
-    </label>
+  <div className="flex items-center gap-2">
+    <span>Require Approval</span>
   </div>
+  <label className="relative inline-flex items-center cursor-pointer">
+    <input
+      type="checkbox"
+      className="sr-only peer"
+      checked={requireApproval}
+      onChange={() => setRequireApproval(!requireApproval)}
+    />
+    <div className="w-11 h-6 bg-gray-600 rounded-full peer-checked:bg-purple-500 peer-focus:ring-2 peer-focus:ring-purple-300 transition-colors duration-300 relative">
+      
+      {/* White circle on left, visible when unchecked */}
+      {!requireApproval && (
+        <div className="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full"></div>
+      )}
+      
+      {/* White circle on right, visible when checked */}
+      {requireApproval && (
+        <div className="absolute top-0.5 right-0.5 w-5 h-5 bg-white rounded-full"></div>
+      )}
+      
+    </div>
+  </label>
+</div>
+
+
+
+
 
   {/* Capacity Row */}
   <div className="flex items-center justify-between text-white/80 text-sm">
